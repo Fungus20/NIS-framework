@@ -15,7 +15,9 @@ This repository contains the manuscript for the NIS (Nested Integral Structure) 
 
 The basic iteration takes the form
 
-\[ I_{n+1} = \int_{L(I_n)}^{U(I_n)} f(t)\, dt \]
+\[
+I_{n+1} = \int_{L(I_n)}^{U(I_n)} f(t)\, dt
+\]
 
 where the integration bounds at each step are determined by the numerical output of the preceding step.
 
