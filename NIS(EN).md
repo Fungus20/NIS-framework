@@ -1,0 +1,733 @@
+# Nested Integral Structure
+
+**Abstract**: This paper establishes a dynamical-system framework based on the iteration of variable-limit integrals (Nested Integral Structure, NIS). The core rule is that the upper and lower limits of the outer integral are dynamically determined by the numerical result of the preceding inner integral, and the computation proceeds strictly layer by layer from the inside out. The original form is a finite-depth multiple nested integral, which is extended in two directions—"recursive convergence" and "cumulative summation"—and described under a unified state-update formulation, where static series appear as a degenerate case. Using the contraction mapping principle and perturbation summability conditions, this paper provides sufficient conditions for the convergence of iterative sequences, establishes the existence and uniqueness theorem of fixed points, and analyzes the asymptotic behavior in both standard contraction and critical cases. This framework can be used to model dynamic evolution processes in which the preceding output determines the boundaries of subsequent operations. It aims to systematically describe variable-limit integral iterations within existing theoretical frameworks, rather than establishing new contraction mapping theories.
+
+**Keywords**: nested integral structure; contraction mapping; perturbation summability; fixed point; convergence; variable-limit integral iteration
+
+**Declaration**: The mathematical framework and core conclusions of this paper were proposed and completed by the author. AI tools assisted with language polishing, typesetting, and cross-checking of mathematical formula typesetting; all key mathematical propositions were independently verified by the author.
+
+**Conflict of Interest Statement**: The author declares that there is no conflict of interest regarding the publication of this paper.
+
+---
+
+## 1. Core Idea and Original Prototype
+
+### 1.1 Core Idea
+
+The upper and lower limits of the outer integral are directly determined by the numerical result of the inner integral, and the computation proceeds strictly from the inside out (since the outer integration domain depends on the inner result, the order of integration cannot be interchanged). Based on seven-fold nesting, the framework is extended in two directions—"recursive convergence" and "cumulative summation"—to establish a unified state-update description for modeling dynamic evolution processes where the previous step's state determines the subsequent integral boundaries. When corresponding convergence conditions are satisfied, limit structures analogous to classical infinite nested expressions can be further discussed.
+
+**Scope of this paper**: This paper primarily focuses on the formal definition, basic properties, and unified convergence framework of the dynamic-boundary nested integral structure. This paper does not claim to establish new contraction mapping theory or replace existing non-autonomous dynamical system theories; rather, it places the specific structure of variable-limit integral iteration within relevant theoretical frameworks for systematic description, analyzing its unique integral-boundary dependence mechanism. Future work will build on this to study more specific dynamical system properties, generalized structures, and application models.
+
+### 1.2 Original Prototype: Finite $N$-fold Nested Integral
+
+$$
+\begin{cases}
+I_N = \displaystyle\int_{L_N}^{U_N} f_N(t_N) \, dt_N \\
+I_k = \displaystyle\int_{L_k(I_{k+1})}^{U_k(I_{k+1})} f_k(t_k) \, dt_k, \quad k = N-1, \dots, 1
+\end{cases}
+$$
+
+The final result is $I^{(N)} = I_1$. When $N = 7$, this gives the original seven-fold nested integral.
+
+**Subscript convention and correspondence**: A larger subscript $k$ corresponds to a deeper inner layer; $I_N$ is the innermost integral (computed first), and $I_1$ is the outermost (computed last). The computation order is strictly $I_N \to I_{N-1} \to \cdots \to I_1$. For an autonomous recurrence where the same integral mapping is repeatedly applied ($L_n \equiv L$, $U_n \equiv U$, $f_n \equiv f$), the sequence takes $I_0$ as the zeroth-iteration initial state; after $n$ mappings, we obtain $I_n$. If we set $I^{(0)} := I_0$ to denote the zero-layer initial state, then in the autonomous case $I_n = I^{(n)}$. If instead the innermost result is defined as the first layer $I^{(1)}$, then $I_n = I^{(n+1)}$. To avoid off-by-one ambiguity, this paper uniformly adopts the former convention:
+
+$$
+I^{(0)} := I_0, \qquad I^{(n+1)} = F\bigl(I^{(n)}\bigr), \quad n \ge 0,
+$$
+
+so that $I_n = I^{(n)}$.
+
+**Essential difference from classical nested integrals**: In traditional multiple integrals, the integration region is a predetermined fixed constant, and each layer can be evaluated independently; the order can be exchanged under conditions such as Fubini–Tonelli. The core difference of the present structure is that the integration boundaries are dynamically generated by the numerical results of the inner integrals—the outer limits $L_k, U_k$ directly depend on the inner output $I_{k+1}$, forming a closed loop of "result $\to$ boundary $\to$ next result." Therefore, under this dependence structure, computation must strictly proceed inside-out; one cannot directly exchange the order based on Fubini–Tonelli as with fixed regions. This dynamic-boundary mechanism constitutes the main distinction between our structure and classical fixed-region multiple integrals.
+
+### 1.3 Extension: Infinite Nested Integral
+
+**Definition 1.3 (Infinite Nested Integral)**: If for every positive integer $N$ the finite nested structure of Section 1.2 is well-defined, yielding a truncated sequence $\{I^{(N)}\}_{N=1}^\infty$, then when this sequence converges, define its limit as the infinite nested integral value:
+
+$$
+I^* := \lim_{N \to \infty} I^{(N)}
+$$
+
+If the sequence diverges (i.e., the limit does not exist), the infinite nesting is non-convergent, and this case is not discussed in this paper. Sufficient conditions for convergence are given in Section 2.2 (autonomous case) and Section 4.1 (non-autonomous hybrid case); a complete characterization of necessary and sufficient conditions remains for future research.
+
+**Remark**: In the non-autonomous case, the $N$-fold truncation corresponds to the composition $F_1 \circ F_2 \circ \cdots \circ F_{N-1}$ evaluated in inside-out order (the innermost result is first acted upon by $F_{N-1}$, then outward step by step, finally output by $F_1$); adding one more layer means inserting a new layer mapping $F_N$ at the innermost position of the existing composite structure. Adding layers in the autonomous case is equivalent to advancing the iteration by one more step. The "inside-out layer progression" of finite nesting (building outward by wrapping the previous result in new integral boundaries) and the "forward iteration from the initial state" of infinite recursion (stepping forward chronologically or procedurally from a starting value) are two distinct index directions that must be strictly distinguished when transplanting the framework.
+
+### 1.4 Symbolic Derivation of the Fixed-Point Equation
+
+If the autonomous finite-truncation sequence $\{I^{(N)}\}$ converges and the mapping $F$ is continuous, taking the limit yields a formal fixed-point equation. This subsection is purely a formal derivation; the existence and uniqueness of the fixed point are established by the contraction mapping theorem below.
+
+Only in the autonomous case, from $I^{(N+1)} = F(I^{(N)})$ (where $F$ does not change with depth), taking $N \to \infty$ and using the continuity of $F$ gives the core fixed-point equation:
+
+$$
+\boxed{I^* = F(I^*)}
+$$
+
+The non-autonomous case has no unified fixed-point equation (since $F_n$ varies with depth). If the conditions of adjacent perturbation summability and uniform contraction in Section 4.1 are satisfied, then $F_n$ converges uniformly to a limit mapping $F$, and the iteration limit satisfies $I^* = F(I^*)$; however, this is a fixed-point relation of the limit mapping obtained under additional convergence conditions, not an inherent property of the general non-autonomous case itself.
+
+### 1.5 General Basic Assumptions
+
+To avoid repeated declarations in later chapters, the default premises for the entire paper are collected here:
+
+- **(H1)** All integrands $f_n, f_{n,k}$ are continuous on their respective integration intervals; if the interval is unbounded, the corresponding improper integral exists in the usual sense.
+- **(H2)** All boundary functions $L_n, U_n, L_{n,k}, U_{n,k}$ are of class $C^1$ (continuously differentiable).
+- **(H3)** Under the default "undirected integral" convention in the main text, require $L_n(x) \le U_n(x)$ and $L_{n,k}(x) \le U_{n,k}(x)$; if a directed integral convention is adopted, reversed limits are allowed and defined by $\int_a^b f = -\int_b^a f$. Engineering or physical models that require "lower bound not exceeding upper bound" should treat this as an additional semantic constraint, not as a condition for the mathematical validity of the integral itself.
+- **(H4)** The iteration domain is a forward-invariant closed set $X$ (in one dimension typically taken as a closed interval $[a,b]$; construction methods are given in Section 2.1), ensuring that the mapping $F_n: X \to X$ does not escape.
+- **(H5)** The default working space is the one-dimensional real domain $\mathbb{R}$; higher-dimensional extensions require discussion in an explicit normed space, establishing contractivity via the Lipschitz constant or the operator norm of the Jacobian, see Appendix.
+- **(H6)** The error metric uses the absolute value $\mathrm{dist}(x,y) := \lvert x - y\rvert$ (in one dimension the Euclidean distance reduces to the absolute value, avoiding notational ambiguity between $\rho$ as a metric space distance and the real modulus).
+
+### Symbol Table
+
+| Symbol | Meaning |
+|:---|:---|
+| $I^{(N)}$ | Truncated value of the $N$-fold finite nested integral |
+| $I_n$ | The $n$-th term of the recursive sequence (in autonomous case $I_n = I^{(n)}$) |
+| $I^*$ | Steady state / fixed point of the infinite nested integral |
+| $F, F_n$ | Autonomous / non-autonomous integral mapping |
+| $q$ | Global / eventually uniformly Lipschitz compression constant, $0 \le q < 1$ |
+| $\lambda$ | Exponential decay coefficient, $0 < \lambda < 1$ (Theorem 4.1 remark) |
+| $\mathrm{dist}(x,y)$ | One-dimensional distance, defined as $\mathrm{dist}(x,y) := \lvert x - y\rvert$ |
+| $q_\infty$ | Asymptotic Lipschitz supremum, $\limsup_{n\to\infty} \sup_{x\in X} \lvert F_n'(x)\rvert$ |
+| $\varepsilon_n$ | Adjacent perturbation upper bound, $\varepsilon_n := \sup_{x\in X} \lvert F_n(x) - F_{n-1}(x)\rvert$ |
+| $\delta_k$ | Per-step numerical computation error bound at step $k$ (Section 5.4) |
+| $a_k$ | Map-approximation error at step $k$, $a_k := \sup_{x\in X} \lvert F_k(x) - F(x)\rvert$ |
+| $e_n$ | Iterate error at step $n$, $e_n := \lvert I_n - I^*\rvert$ |
+
+---
+
+## 2. Direction I: Recursive Convergence (Autonomous Iteration)
+
+### 2.1 Basic Definition
+
+Let $f_n$ be continuous and $L_n, U_n$ be $C^1$ functions. Given an initial value $I_0 \in X$, the iteration formula is:
+
+$$
+I_{n+1} = \int_{L_n(I_n)}^{U_n(I_n)} f_n(t) \, dt, \quad n \ge 0
+$$
+
+**Definition and construction of the forward-invariant closed set $X$**: $X$ satisfies $F_n(X) \subseteq X$ (iteration results do not escape). In practice, one typically takes $X = [a,b]$ (a one-dimensional closed interval), requiring for any $x \in [a,b]$:
+
+1. The integration interval is valid: $L_n(x) \le U_n(x)$ (guaranteed by H3; equality corresponds to degenerating to a zero-measure interval).
+2. The mapping does not escape: $F_n(x) \in [a,b]$, i.e., $F_n: [a,b] \to [a,b]$.
+
+In the autonomous case, self-mapping can be confirmed by verifying $\min_{x\in[a,b]} F(x) \ge a$ and $\max_{x\in[a,b]} F(x) \le b$; in the non-autonomous case, one must verify $F_n([a,b]) \subseteq [a,b]$ for all relevant $n$. To construct a local invariant neighborhood, semi-local analysis methods may be used in specific problems, but this is not a necessary condition for the theorems in this paper.
+
+**Note on the correspondence**: When the fixed innermost integration result of the autonomous structure is selected as the initial state, repeated iteration is indeed equivalent to repeatedly adding the same outer integral. For a general non-autonomous structure, the finite nesting corresponds to the composition $F_1 \circ F_2 \circ \cdots \circ F_{N-1}$ in "inside-out" layer order (in inside-out computational order, the innermost value $I_N$ is the base integration value, acted on outward layer by layer by $F_{N-1}, \dots, F_1$, with the outermost map $F_1$ producing the final output); consequently this paper no longer unconditionally refers to "any $N$-step truncation of a non-autonomous recursion" as the original finite $N$-fold nesting, but instead treats it as an explicitly specified non-autonomous recursive representation. Conversely, given any family of maps $\{F_k\}_{k=1}^N$ that each depend only on their own single input, without any cross-layer global dependence, this family can always be organized according to the format of this section into a valid $N$-fold nested integral structure; but this is merely the range of applicability of the NIS definition itself, and does not mean that the non-autonomous recursive sequence $\{I_n\}_{n=0}^N$ obtained by running forward from a given initial value $I_0$ is automatically equal to the truncation value obtained by expanding outward from some fixed set of innermost base values—the two are opposite in terms of "which end is the given initial data and which end is the computed result," and in general cannot be identified without further explanation.
+
+### 2.2 Global Contraction Convergence Theorem (Complete Proof)
+
+**Theorem (Banach Contraction Mapping Principle [1])**: Let $(X, \rho)$ be a complete metric space, and $T: X \to X$ be a contraction mapping, i.e., there exists a constant $\alpha \in [0, 1)$ such that for any $x, y \in X$,
+
+$$
+\rho(Tx, Ty) \le \alpha \rho(x, y)
+$$
+
+Then $T$ has a unique fixed point $z \in X$, satisfying $Tz = z$.
+
+**Proof**:
+
+**Step 1**: Construct a Cauchy sequence. Take any initial point $x_0 \in X$, define $x_n = T^n x_0$, $n \ge 0$. First,
+
+$$
+\rho(x_1, x_0) = \rho(Tx_0, x_0),
+$$
+
+and by the contraction condition for any $m \ge 1$,
+
+$$
+\rho(x_{m+1}, x_m) = \rho(Tx_m, Tx_{m-1}) \le \alpha \rho(x_m, x_{m-1}) \le \cdots \le \alpha^m \rho(x_1, x_0).
+$$
+
+For any $n > m$, by the triangle inequality:
+
+$$
+\rho(x_m, x_n) \le \sum_{k=m}^{n-1} \rho(x_k, x_{k+1}) \le \sum_{k=m}^{n-1} \alpha^k \rho(x_1, x_0) \le \frac{\alpha^m}{1-\alpha} \rho(x_1, x_0)
+$$
+
+Since $\alpha < 1$, the right-hand side tends to $0$ as $m \to \infty$, so $\{x_n\}$ is a Cauchy sequence.
+
+**Step 2**: Existence via completeness. Since $X$ is complete, the Cauchy sequence $\{x_n\}$ converges to some $z \in X$, i.e., $x_n \to z$. By the continuity of the contraction mapping (every contraction is continuous):
+
+$$
+Tz = T\Big(\lim_{n\to\infty} x_n\Big) = \lim_{n\to\infty} Tx_n = \lim_{n\to\infty} x_{n+1} = z
+$$
+
+Hence $z$ is a fixed point of $T$.
+
+**Step 3**: Uniqueness. Suppose $y \in X$ is also a fixed point of $T$, i.e., $Ty = y$. Then
+
+$$
+\rho(y, z) = \rho(Ty, Tz) \le \alpha \rho(y, z)
+$$
+
+Since $\alpha < 1$, this forces $\rho(y, z) = 0$, i.e., $y = z$. This proves uniqueness.
+
+**Corollary (Error bound)**: Let $z$ be the unique fixed point of $T$. Then for any $x_0 \in X$,
+
+$$
+\rho(z, x_m) \le \frac{\alpha^m}{1-\alpha} \rho(Tx_0, x_0)
+$$
+
+#### Application to Nested Integral Structures
+
+**Remark on hierarchy of conditions**: This section uses classical calculus tools to establish contraction in the autonomous, $C^1$-differentiable case; the main theorem of Section 4.1 weakens the conditions to require only Lipschitz continuity, accommodating non-smooth and non-autonomous systems.
+
+**Step A. Differentiability of the mapping.** By Assumption (H2) (the boundary functions are of class $C^1$) and (H3) (the integration interval is valid), together with the Leibniz rule for differentiating a variable-limit integral, the derivative of the single-step map $F(x) = \int_{L(x)}^{U(x)} f(t) \, dt$ is
+
+$$
+F'(x) = f(U(x)) \cdot U'(x) - f(L(x)) \cdot L'(x)
+$$
+
+Since $f$ is continuous and $L, U$ are of class $C^1$, $F(x)$ is continuously differentiable on $X$.
+
+**Step B. Establishing contraction.** If there exists $q < 1$ such that $|F'(x)| \le q$, then by the Lagrange mean value theorem (note: this uses the one-dimensional mean value theorem for derivatives; in the higher-dimensional case, $|F'(x)|$ must be replaced by the operator norm $\|J_F(x)\|_{\mathrm{op}}$ of the Jacobian matrix; see the Appendix):
+
+$$
+|F(x) - F(y)| \le q |x - y|
+$$
+
+i.e., $F$ is a contraction.
+
+**Step C. Convergence conclusion.** The closed interval $[a,b] \subset \mathbb{R}$, as a metric space, is complete, satisfying the hypothesis of the Banach fixed-point theorem. By this theorem, the iteration $I_{n+1} = F(I_n)$ necessarily converges to a unique fixed point $I^*$, with error bound:
+
+$$
+|I_n - I^*| \le \frac{q^n}{1-q} |I_1 - I_0|
+$$
+
+Note: This theorem provides a rigorous mathematical guarantee for the existence and uniqueness of the fixed point in the fixed-point equation $I^* = F(I^*)$ of Section 1.4.
+
+### 2.3 Extensions of Convergence
+
+1. **Local and semi-local convergence**: Ostrowski-type results [2] show that, under suitable local differentiability conditions, $|F'(I^*)| < 1$ at the fixed point implies linear convergence in a neighborhood; Kantorovich-type theorems [3] establish convergence criteria using semi-local information such as derivative bounds, Lipschitz conditions, and the initial point.
+2. **Classification of convergence order**:
+   - Linear convergence ($0 < |F'(I^*)| < 1$)
+   - Superlinear convergence ($F'(I^*) = 0$)
+   - Quadratic local convergence ($F'(I^*) = 0$ and $F''(I^*) \ne 0$ under the stated local regularity assumptions)
+
+   Aitken's $\Delta^2$ method can accelerate suitable linearly convergent fixed-point iterations, while Steffensen iteration can achieve quadratic local convergence under appropriate regularity conditions [6].
+3. **Characteristics of the iteration path**: In a suitable neighborhood of the fixed point, if $0 < F'(I^*) < 1$, the iteration is locally order-preserving and converges linearly; if $-1 < F'(I^*) < 0$, it locally alternates and converges linearly; $|F'(I^*)| = 1$ is a critical case in which local linearization alone does not determine convergence.
+
+### 2.4 Failure Boundaries and Counterexamples
+
+This section is restricted to the one-dimensional real line $\mathbb{R}$; $|\cdot|$ denotes the absolute value, and divergence means $|I_n| \to +\infty$.
+
+1. **Local contraction without global contraction**: Take $f(t) = 2t$, $L(x) = 0$, $U(x) = x$, so $F(x) = x^2$, $F'(x) = 2x$. In a neighborhood of $x = 0$, $|F'(x)| < 1$, but there is no globally uniform $q < 1$. When $|I_0| < 1$, $I_n \to 0$; when $I_0 = 1$, the orbit is constantly $1$, and since $F'(1) = 2 > 1$, $1$ is a repelling fixed point. If $I_0 = -1$, the orbit enters $1$ after one step and remains there; but $1$ is a repelling fixed point, and this orbit stays only because it lands exactly on it, not because it is attracted. If $I_0 > 1$ or $I_0 < -1$, then $|I_n| = |I_0|^{2^n} \to \infty$.
+
+   Hence a repelling fixed point does not mean that "any perturbation diverges": for example, the orbit starting at $I_0 = 1-\varepsilon$ ($0 < \varepsilon < 1$) instead tends to $0$; only the perturbation on the other side, $I_0 = 1+\varepsilon$, diverges.
+
+2. **Critical convergence case**: $F(x) = \sin x$, $F'(0) = 1$; the iteration $x_{n+1} = \sin x_n$ converges, but at a sublinear rate ($I_n \sim \sqrt{3/n}$, i.e., $O(n^{-1/2})$). This sublinear rate is a classical result for discrete fixed-point iterations; the proof idea is analogous to that of Section 8.2, obtained via Taylor expansion together with the Stolz–Cesàro theorem, and the detailed derivation is omitted here.
+
+---
+
+## 3. Direction II: Cumulative Summation (Static Integral Series)
+
+### 3.1 Definition
+
+Single integral term:
+
+$$
+J_k = \int_{L_k}^{U_k} f_k(t) \, dt
+$$
+
+Finite partial sum:
+
+$$
+S_n = \sum_{k=1}^n J_k
+$$
+
+Infinite series steady-state sum:
+
+$$
+S^* = \sum_{k=1}^\infty J_k
+$$
+
+### 3.2 Convergence Criteria
+
+The static integral series is essentially a series of numerical terms (each $J_k$ is a constant independent of state), so classical series-convergence tests apply directly. Commonly used criteria are as follows:
+
+1. **Absolute convergence**: the series $\sum |J_k| < \infty$;
+2. **Ratio test**: the limit $\lim_{k \to \infty} \big|J_{k+1}/J_k \big| = r < 1$ (requires $J_k \ne 0$);
+3. **Leibniz test**: $J_k$ alternates in sign, $|J_k|$ decreases monotonically, and $J_k \to 0$ (applies only to alternating series).
+
+---
+
+## 4. Combined Formulation (Recursion + Accumulation Hybrid Framework)
+
+### 4.1 Definition and Convergence Theorem
+
+Iteration formula:
+
+$$
+I_{n+1} = \sum_{k=1}^{m_n} \int_{L_{n,k}(I_n)}^{U_{n,k}(I_n)} f_{n,k}(t) \, dt
+$$
+
+Family of maps:
+
+$$
+F_n(x) = \sum_{k=1}^{m_n} \int_{L_{n,k}(x)}^{U_{n,k}(x)} f_{n,k}(t) \, dt
+$$
+
+**Degenerate relations**: When $m_n \equiv 1$ for all $n$, this reduces to the pure recursive model of Direction One; if the framework is further extended to the affine cumulative form $I_{n+1} = I_n + \sum_{k=1}^{m_n} \int_{L_{n,k}}^{U_{n,k}} f_{n,k}(t) \, dt$ with constant boundaries, it reduces to the static integral series of Direction Two. The merged framework of the main text is a single-step, multiterm state-update recursion, a direct generalization of Direction One.
+
+**Theorem 4.1 (Convergence of the Combined Formulation)**: This theorem provides sufficient conditions for the convergence of the non-autonomous state-update iteration $I_{n+1} = F_n(I_n)$. For the general non-autonomous finite nested truncation of Definition 1.3, since its computational direction and the location of the initial data differ from those of a forward non-autonomous iteration, its convergence cannot be inferred directly from this theorem; consistency between the two requires additional structural conditions. In the autonomous case, under the corresponding initial-state convention, the two are equivalent. Let $X = [a,b]$ be a common forward-invariant closed set, and let the sequence of maps $\{F_n\} \subset C(X)$ satisfy:
+
+- **(i) Self-mapping**: $\forall n, F_n: X \to X$;
+- **(ii) Eventually uniformly Lipschitz compression**: $\exists N_0, q \in (0,1), \forall n \ge N_0, \forall x, y \in X, |F_n(x) - F_n(y)| \le q|x - y|$;
+- **(iii) Adjacent perturbation summability**: $\sum_{n=2}^\infty \sup_{x\in X}|F_n(x) - F_{n-1}(x)| < \infty$.
+
+Then there exists a limiting map $F: X \to X$ such that $F_n \rightrightarrows F$ (uniform convergence), and the iteration $I_{n+1} = F_n(I_n)$ converges, for every $I_0 \in X$, to a unique fixed point $I^* = F(I^*)$. This conclusion is a sufficient condition, not a necessary-and-sufficient characterization of convergence for all non-autonomous iterations.
+
+In plain terms, condition (iii) requires that the total variation between successive maps remains finite: it rules out persistent large-amplitude periodic oscillation of the maps, while still allowing slow drift over time.
+
+**Remark**: Condition (iii) guarantees that $\{F_n\}$ is a uniformly Cauchy sequence on $X$, hence a uniform limit $F$ exists. Combined with $F_n(X) \subseteq X$ and the closedness of $X$, it further follows that $F(X) \subseteq X$. The uniform Lipschitz condition passes directly to the limiting map, so $F$ itself is also a contraction.
+
+**Note**: If there exist constants $C>0$ and $\lambda \in (0,1)$ such that $\sup_{x\in X}|F_n(x) - F_{n-1}(x)| \le C\lambda^n$, then condition (iii) automatically holds.
+
+**Dimensional scope**: Condition (ii) of this theorem, in the one-dimensional case, is implied by $|F_n'(x)| \le q$ (via the Lagrange mean value theorem); the converse does not hold, i.e., a Lipschitz-continuous function need not be differentiable. In the higher-dimensional case, $|F_n(x) - F_n(y)| \le q|x - y|$ must be replaced by an operator-norm form (which can be guaranteed by a bounded operator norm of the Jacobian, $\|J_{F_n}(x)\|_{\mathrm{op}} \le q$; see Appendix B.2). The class of maps is relaxed from $C^1(X)$ to $C(X)$ (requiring only continuity plus uniform Lipschitz continuity), to accommodate non-smooth situations.
+
+#### Proof of the Main Theorem
+
+**Step 1 (Well-definedness of the sequence and existence of the uniform limit)**: By condition (i), $X$ is a forward-invariant set, so the iterative sequence $\{I_n\}$ is always defined within $X$, avoiding domain escape; condition (ii) ensures that for $n \ge N_0$, each $F_n$ is a contraction with coefficient $q$.
+
+By condition (iii), let
+
+$$
+\varepsilon_n := \sup_{x\in X}|F_n(x) - F_{n-1}(x)|,
+$$
+
+so that $\sum_{n=2}^\infty \varepsilon_n < \infty$. For any $m > l \ge 2$,
+
+$$
+\sup_{x\in X}|F_m(x) - F_l(x)| \le \sum_{k=l+1}^m \varepsilon_k.
+$$
+
+The right-hand side tends to $0$ as $l \to \infty$, so $\{F_n\}$ is a uniformly Cauchy sequence on $X$. Since $C(X)$ is a Banach space under the uniform norm, a uniformly Cauchy sequence converges, so there exists a continuous map $F: X \to \mathbb{R}$ such that $F_n \rightrightarrows F$. Since $F_n(X) \subseteq X$ and $X$ is closed, it follows that $F(X) \subseteq X$.
+
+**Step 2 (The iterative sequence is Cauchy)**: Since $I_n \in [a,b]$, we have $|I_n - I_{n-1}| \le b-a$ for all $n$. Let $C = \max\!\left(b-a,\, |I_{N_0+1} - I_{N_0}|\right)$; the following estimate begins at $n \ge N_0+1$:
+
+$$
+|I_{n+1} - I_n| \le q|I_n - I_{n-1}| + \varepsilon_n.
+$$
+
+Expanding the recursion gives
+
+$$
+|I_{n+1} - I_n| \le q^{n-N_0} C + \sum_{k=N_0+1}^{n} q^{n-k}\varepsilon_k.
+$$
+
+The first term corresponds to a convergent geometric series; summing the second term over $n$ and applying a Tonelli-type rearrangement of a non-negative double series gives
+
+$$
+\sum_{n=N_0+1}^{\infty} \sum_{k=N_0+1}^{n} q^{n-k}\varepsilon_k \le \frac{1}{1-q} \sum_{k=N_0+1}^{\infty} \varepsilon_k < \infty.
+$$
+
+Hence $\sum |I_{n+1} - I_n| < \infty$, so $\{I_n\}$ is a Cauchy sequence. Since $X = [a,b]$ is a closed subset of $\mathbb{R}$, it is complete, so the Cauchy sequence $\{I_n\}$ converges to some $I^* \in X$.
+
+**Step 3 (Contraction and continuity of the limiting map)**: By condition (ii), for any $x, y \in X$ and all $n \ge N_0$,
+
+$$
+|F_n(x) - F_n(y)| \le q|x - y|.
+$$
+
+Letting $n \to \infty$ and using $F_n \rightrightarrows F$,
+
+$$
+|F(x) - F(y)| \le q|x - y|.
+$$
+
+Hence the limiting map $F$ is itself a contraction (and is therefore automatically continuous). Uniqueness is guaranteed by the contraction property.
+
+**Step 4 (Passing to the limit)**: Since $I_{n+1} = F_n(I_n)$ and $I_n \to I^*$, decompose
+
+$$
+\begin{aligned}
+|F_n(I_n) - F(I^*)| &\le |F_n(I_n) - F(I_n)| + |F(I_n) - F(I^*)| \\
+&\le \sup_{x\in X}|F_n(x) - F(x)| + |F(I_n) - F(I^*)|.
+\end{aligned}
+$$
+
+The first term tends to $0$ by uniform convergence, and the second term tends to $0$ by the (Lipschitz) continuity of $F$. Hence $F_n(I_n) \to F(I^*)$. On the other hand, $I_{n+1} \to I^*$, so $I^* = F(I^*)$.
+
+Here, "interchanging the limit and the map" has not been used as an unproven rule, but is obtained directly from the estimate above. $\blacksquare$
+
+**Relation to Direction One**: Direction One is the repeated iteration of a single fixed contraction, to which the Banach theorem applies directly; the merged framework is a sequence of contractions applied one after another, and convergence requires the additional uniform-convergence condition. When $m_n \equiv 1$ and $F_n \equiv F$ (constant in $n$), the merged formulation reduces to the autonomous recursive model of Direction One.
+
+**Functional-analytic background**: The merged summation structure is related to iterated function systems (IFS) and non-autonomous discrete dynamical systems; the convergence proof of this paper is based primarily on uniform Lipschitz compression, perturbation summability, and the Banach fixed-point principle. For the classical finite-IFS case, see Hutchinson (1981) [5]; the infinite sequence of maps studied here may be regarded as a limiting extension of that setting. This framework can likewise be used to provide a corresponding functional-analytic basis for numerical iterative solution of nonlinear differential equations.
+
+### 4.2 Derivative Correction for State-Dependent Integrands
+
+**Relation to the main theorem**: This section is an extension of the main theorem of Section 4.1 to the case where the integrand depends on the state. If $f_{n,k}$ depends on the current iterate state $I_n$, the Leibniz rule for differentiating the integral must be supplemented with a partial-derivative integral term with respect to the state variable $x$; as long as the corrected map still satisfies condition (ii) of Section 4.1 (i.e., $\forall n \ge N_0, \forall x,y, |F_n(x) - F_n(y)| \le q|x - y|$), the convergence theorem continues to hold (condition (ii) is then verified using the corrected map).
+
+If the integrand $f_{n,k}(t, I_n)$ depends on the current iterate state, then $F_n$ is a state-dependent nonlinear integral map. This section additionally assumes that $f_{n,k}(t,x)$ is continuous in the state variable $x$, and that the partial derivative $\frac{\partial f_{n,k}}{\partial x}$ exists and is continuous on the relevant integration domain (or satisfies a uniform integrability condition, e.g., there exists an integrable dominating function $g(t)$ independent of $x$ such that $\bigl|\frac{\partial f_{n,k}}{\partial x}(t,x)\bigr| \le g(t)$ a.e.), so as to justify the Leibniz differentiation; on this basis, if the derivative is bounded, the corresponding Lipschitz condition follows. Such structures can be related to Volterra-type integral equations [8], although the two are not equivalent; the Leibniz rule requires an additional partial-integral term:
+
+$$
+\begin{aligned}
+F_n'(x) = \sum_{k=1}^{m_n} \Bigg[ &f_{n,k}\bigl(U_{n,k}(x), x\bigr) \cdot U_{n,k}'(x) \\
+&- f_{n,k}\bigl(L_{n,k}(x), x\bigr) \cdot L_{n,k}'(x) \\
+&+ \int_{L_{n,k}(x)}^{U_{n,k}(x)} \frac{\partial f_{n,k}}{\partial x}(t, x) \, dt \Bigg].
+\end{aligned}
+$$
+
+### 4.3 Non-Autonomous Convergence Criteria
+
+**Note**: This section gives criteria for non-autonomous iterations; for the static cumulative summation case, see Section 3.2.
+
+**Criterion 4.3.1 (Global uniform compression)**: $\forall n, x, y$: $|F_n(x) - F_n(y)| \le q|x - y|$ ($q < 1$). Justification: this is a strengthened version of condition (ii) of Theorem 4.1 with $N_0 = 0$, but it alone cannot guarantee convergence. When $F_n \equiv F$ (the autonomous case), it reduces to the Banach fixed-point principle; in the general non-autonomous case, adjacent perturbation summability (condition (iii)) must also be satisfied for Theorem 4.1 to guarantee convergence to the fixed point of the limiting map.
+
+**Counterexample**: Take $F_{2n}(x) = 0.5x$, $F_{2n+1}(x) = 0.5x + 0.5$; then each $F_n$ satisfies global compression ($q = 0.5$), but $\{F_n\}$ does not converge on $\mathbb{R}$ to any map. For any initial value $I_0 \in [0,1]$, the sequence does not converge to a single state, but instead approaches a period-2 orbit: the even-indexed subsequence $I_{2k} \to 2/3$ and the odd-indexed subsequence $I_{2k+1} \to 1/3$ (given respectively by the two-step composed maps $x \mapsto 0.25x + 0.5$ and $x \mapsto 0.25x + 0.25$, with fixed points $2/3$ and $1/3$ respectively). This shows that global uniform compression alone does not guarantee convergence to a single limit.
+
+More generally, for any $0 < q < 1$ and $a \ne 0$, let $F_n(x) = qx + (-1)^n a$; then every $F_n$ is a contraction with the same constant $q$, but the even and odd subsequences of the iteration $I_{n+1} = qI_n + (-1)^n a$ converge to $\mp a/(q+1)$ respectively, forming a persistent-amplitude oscillation. This example shows that uniform compression alone controls only "the contraction strength at each step," but cannot suppress a persistent systematic oscillation of the maps themselves; to rule out such oscillation, the differences between adjacent maps must be controlled—precisely the role played by the adjacent-perturbation-summability condition (iii) in Theorem 4.1. The example above is constructed on $\mathbb{R}$; on a bounded closed interval, a similar bounded-oscillation example can be obtained via truncation or suitable restriction, with the same conclusion.
+
+**Criterion 4.3.2 (Asymptotic compression)**: If $F_n \in C^1(X)$ and
+
+$$
+\limsup_{n\to\infty} \sup_{x\in X}|F_n'(x)| = q_\infty < 1,
+$$
+
+then there exists $N_0$ and $q \in (q_\infty, 1)$ such that $|F_n'(x)| \le q$ for all $n \ge N_0$, and hence by the mean value theorem an eventually uniformly Lipschitz compression holds. However, this condition alone does not guarantee convergence of the iteration; to invoke Theorem 4.1, the remaining conditions must also be satisfied, in particular adjacent perturbation summability and a common self-mapping property. Once these conditions hold, Theorem 4.1 gives convergence to the unique fixed point of the limiting map.
+
+**Criterion 4.3.3 (Convergence of the limiting map)**: Suppose there exists a common forward-invariant closed set $X$ with $F_n: X \to X$; if $F_n \to F$ converges uniformly on $X$, and there exists a uniform constant $q < 1$ such that
+
+$$
+|F_n(x) - F_n(y)| \le q|x - y|, \qquad x, y \in X,
+$$
+
+then, by taking the limit using the pointwise convergence $F_n \to F$ together with the uniform Lipschitz bound above, $F$ is also a $q$-Lipschitz contraction; combined with $F_n(X) \subseteq X$ and the closedness of $X$, we get $F(X) \subseteq X$, and by the Banach principle $F$ has a unique fixed point $I^*$.
+
+Convergence here must be established independently and cannot simply be read off from the proof of Theorem 4.1 (Theorem 4.1 relies on adjacent perturbation summability to derive the existence of the uniform limit, whereas this criterion assumes uniform convergence directly—a different sufficient condition).
+
+Under the above conditions, by $F_n(X) \subseteq X$ and $I_0 \in X$, induction shows $I_n \in X$ ($\forall n \ge 0$), so the following estimates all take place within $X$. Let $a_n := \sup_{x\in X}|F_n(x) - F(x)| \to 0$ and $e_n := |I_n - I^*|$; then
+
+$$
+e_{n+1} = |F_n(I_n) - F(I^*)| \le |F_n(I_n) - F(I_n)| + |F(I_n) - F(I^*)| \le a_n + qe_n
+$$
+
+Since $0 < q < 1$ and $a_n \to 0$: given any $\epsilon > 0$, choose $N$ so that $a_n < \epsilon(1-q)/2$ for $n \ge N$; expanding the recursion gives $\limsup_n e_n \le \epsilon/2$, so $e_n \to 0$, i.e., the non-autonomous iteration converges to the unique fixed point of $F$. If only uniform convergence is known without a uniform compression constant, this convergence conclusion cannot be derived.
+
+**Note**: This criterion gives only a sufficient condition for the convergence of the non-autonomous iteration, not a necessary one.
+
+**Remark 4.3.4 (Monotonicity and contraction)**: Monotonicity alone is not a sufficient condition for convergence. For example, $F(x) = -x$ on $[-1,1]$ is monotonically decreasing and self-mapping, yet the iteration $I_{n+1} = -I_n$ oscillates forever without converging for $I_0 \ne 0$. Convergence in this framework is guaranteed by uniform compression; monotonicity serves only as an auxiliary analytical tool and is not by itself a valid criterion.
+
+### 4.4 Failure Boundaries and Scope of the Criteria
+
+"Failure" in this section refers first of all to cases in which the compression-type sufficient conditions of this paper cannot be applied directly; it does not imply that the corresponding iteration must diverge. Specifically:
+
+1. No uniform compression constant can be established in the tail, i.e., there is no $q < 1$ such that $|F_n(x) - F_n(y)| \le q|x - y|$ for all sufficiently large $n$;
+2. There is no common forward-invariant interval, or the modeling semantics require $L_n(x) \le U_n(x)$ and this constraint fails to hold. Under a directed-integral convention, $L_n(x) > U_n(x)$ is not itself an error in the definition of the integral, but indicates a reversal of the integration direction;
+3. If the limiting map $F$ is differentiable at the fixed point $I^*$ and $|F'(I^*)| > 1$, then this fixed point is a local repeller; if $F$ is only Lipschitz continuous but not differentiable, local repulsion must instead be characterized via the smallest available Lipschitz constant exceeding $1$ on the relevant neighborhood. This only excludes the possibility of stable convergence to this fixed point from nearby points; it does not exclude the orbit converging to another attracting fixed point, a periodic orbit, or other limiting behavior determined by the specific dynamical system;
+4. When $F_n$ does not satisfy the adjacent-perturbation-summability condition required by Theorem 4.1, the theorem of this paper cannot be used to conclude convergence of the non-autonomous iteration; other dynamical-systems tools or stronger structural analysis are then required (for an explicit counterexample, see the periodically oscillating map of Section 4.3.1).
+
+---
+
+## 5. Numerical Implementation
+
+### 5.1 Iteration Stopping Criteria
+
+1. **Absolute residual**: $|I_{n+1} - I_n| < \varepsilon_1$ — suitable when the iterate values are of small magnitude;
+2. **Relative residual**: $|I_{n+1} - I_n|/|I_n| < \varepsilon_2$ (used only when $I_n \ne 0$; otherwise it reduces to the absolute residual) — suitable when the iterate values are of large magnitude, avoiding drift in precision with the magnitude;
+3. **Fixed-point residual**: $|I_{n+1} - F(I_{n+1})| < \varepsilon_3$ — directly measures the deviation of the current value from the steady state, preferred when high precision is required (primarily applicable to the autonomous case, or to a late stage of a non-autonomous iteration already close to the limiting map; in the general non-autonomous case, the adjacent residual $|I_{n+1} - I_n|$ is recommended instead).
+
+### 5.2 Strategies for Selecting the Initial Value
+
+1. If $F$ is monotonically increasing: take $I_0 = 0$ or a boundary of the interval;
+2. If $F$ is monotonically decreasing: verify with several initial values, checking for alternating oscillatory convergence;
+3. Use bisection to locate a safe feasible region, taking the midpoint of the interval as the initial iterate.
+
+### 5.3 Iteration Pseudocode
+
+```text
+Input: I0, ε, N_max, {F_n}  // In the autonomous case, take F_n ≡ F
+Output: I*
+1. I_prev = I0
+2. for n = 1 to N_max:
+3.     I_curr = F_n(I_prev)  // computed as the corresponding variable-limit integral, per the definition
+4.     if |I_curr - I_prev| < ε: break  // may select absolute, relative, or fixed-point residual per Section 5.1
+5.     I_prev = I_curr
+6. return I_curr
+```
+
+### 5.4 Numerical Error Coupling
+
+If the map $\widetilde{F}_n$ actually computed at each step satisfies the uniform error bound $\sup_{x\in X}|\widetilde{F}_n(x) - F_n(x)| \le \delta$, and the corresponding iteration has a uniform compression constant $q < 1$, then, under a standard perturbation analysis, the magnitude of the steady-state error can be controlled by a geometric series, with a typical upper bound of
+
+$$
+\text{Total Error} \le \frac{\delta}{1-q}.
+$$
+
+This estimate depends on the uniform per-step error bound and the compression property, and cannot be used independently of these conditions. In particular, as $q \to 1^{-}$, the perturbation-amplification factor $(1-q)^{-1}$ grows, and the system becomes increasingly sensitive to modeling error, truncation error, and numerical perturbation.
+
+**Note**: This error bound is primarily intended for autonomous iteration; in the non-autonomous case, all $F_n$ must share a common compression constant $q$ and a common per-step error bound $\delta$ for the conclusion to carry over.
+
+**Finite-$n$ version**: In an actual numerical iteration $\widetilde{I}_{n+1} = \widetilde{F}_n(\widetilde{I}_n)$, if $\sup_{x\in X}|\widetilde{F}_n(x) - F_n(x)| \le \delta_n$, let
+
+$$
+\widetilde{e}_n := |\widetilde{I}_n - I^*|, \qquad a_n := \sup_{x\in X}|F_n(x) - F(x)|,
+$$
+
+then, under the eventually uniformly Lipschitz compression condition of Theorem 4.1 (i.e., $|F_n(x) - F_n(y)| \le q|x-y|$ holds for $n \ge N_0$), for $n \ge N_0$ we have
+
+$$
+\widetilde{e}_n \le q^{n-N_0}\widetilde{e}_{N_0} + \sum_{k=N_0}^{n-1} q^{n-1-k}(\delta_k + a_k),
+$$
+
+where $q^{n-1-k}$ is the geometric decay weight of error propagation (the closer $k$ is to $n-1$, the closer the weight is to $1$; earlier errors, after several steps of compression, have their weight decayed to $q^{n-1-k}$). As $n \to \infty$, if $\delta_k \le \delta$ is uniformly bounded and $a_k \to 0$, the above reduces to the steady-state bound $\widetilde{e}_n \le \delta/(1-q) + o(1)$.
+
+**Practical engineering advice**: Simpson's rule or Gauss–Legendre quadrature is preferred; the per-step integration error should be controlled to the order of $10^{-6}$; if the compression constant $q$ is close to $1$ (e.g., $q = 0.99$), the per-step error must be compressed to the order of $10^{-8}$ in order to guarantee a final result accuracy of $10^{-6}$.
+
+---
+
+## 6. Configurability of the Model and Cross-Domain Transfer
+
+**Note**: The application scenarios in this chapter are used to illustrate the potential expressive forms of the nested integral structure in different domains, and are purely structural analogies. This paper does not construct a complete mathematical model for any specific domain, and does not involve parameter identification, experimental validation, or prediction of an actual system; rigorous modeling of these applications requires further research combined with the relevant domain background.
+
+The core recursive formula of the nested integral structure is fixed:
+
+$$
+I_{n+1} = \int_{L(I_n)}^{U(I_n)} f(t) \, dt
+$$
+
+By replacing four core components, the same mathematical framework can be adapted to entirely different industries and types of dynamical problems:
+
+1. **Integrand $f(t)$**: system response function, probability density, dynamical equation;
+2. **Boundary functions $L(x), U(x)$**: the range or feasible region corresponding to the current system state;
+3. **Number of recursive layers $N$**: iteration depth, system evolution period;
+4. **Initial value $I_0$**: the initial system state, the starting condition for computation.
+
+After replacing these components, the same mathematical framework can, at the level of structural form, be used to construct dynamical models for inventory management, signal filtering, chemical oscillation reactions, ecological population dynamics, adaptive automatic control, and similar systems. The structure itself is not tied to any particular industry; it only provides the general computational paradigm "state $\to$ integration boundary $\to$ integral cumulative update of the state." The concrete applicability requires further verification against the relevant domain background.
+
+Below are four typical application scenarios that naturally arise from the core rules of this structure; each scenario requires only replacing the integrand $f$, the boundary maps $L, U$, and the state semantics $I_n$:
+
+1. **Dynamic inventory control (conceptual mapping)**: $I_n$ is the ending inventory of the $n$-th period, $f(D)$ is the demand probability density, and $L(I_n), U(I_n)$ are the replenishment bounds triggered by the current inventory level; the concrete cost optimization and replenishment quantity calculation require further development in combination with a business model;
+2. **Adaptive experimental design (conceptual mapping)**: $I_n$ is the cumulative sample size or information entropy, $f(t)$ is the information-gain density, and the boundary is dynamically determined by the current cognitive state; the concrete information-gain function requires separate construction based on experimental-design theory;
+3. **Multi-stage signal processing (conceptual mapping)**: $I_n$ is the filter state or SNR estimate, $f(t)$ is the noise power spectral density, and the integration interval corresponds to an adaptive threshold; the concrete filter design requires separate validation based on signal-processing theory;
+4. **Multi-factor pricing model (conceptual mapping)**: $I_n$ is the cumulative exposure to a risk factor, $f(t)$ is the factor-return distribution, and the boundary is dynamically generated by the current portfolio risk budget; the concrete risk-budget allocation requires separate derivation based on a financial model.
+
+---
+
+## 7. Comparison with Classical Mathematical Concepts
+
+| Object of comparison | Key distinction |
+|:---|:---|
+| Variable upper-limit integral | Upper limit is independent variable $x$, output is a function; in this structure, the boundary is the previous numerical value, output is a one-dimensional numerical sequence |
+| Multiple iterated integral | Inner result becomes outer integrand; in this structure, the inner result becomes the integration bounds of the outer integral |
+| Integral equation | Solve for unknown function $y(x)$; this structure solves for a one-dimensional real iterative sequence |
+| Picard iteration | Iteration variable is a function-space element; the iteration variable in this structure is a real number |
+| Newton–Raphson | A specific second-order-convergent fixed-point iteration used for root-finding; this structure is a general contraction-mapping iteration |
+| One-dimensional discrete function iteration | $x_{n+1}=F(x_n)$ (in the classical case, $F$ is fixed and unchanging); in this structure, $F$ itself contains an integral operation, and the integration boundary is dynamically constructed from the state |
+
+---
+
+## 8. Benchmark Examples
+
+This section uses two representative examples to illustrate how dynamic-boundary integral iteration behaves under different geometric configurations.
+
+### 8.1 Example A: Standard Contraction Convergence (the Omega Constant)
+
+Set the integrand $f(t)=e^{-t}$, with lower integration limit $L = I_n$ and upper limit $+\infty$, giving the iteration formula:
+
+**Remark**: In this example, the upper integration limit is $+\infty$, so the boundary function $U_n$ does not satisfy the $C^1$ assumption of H2; however, this example bypasses the Leibniz-differentiation route by directly and explicitly computing $F(x)=e^{-x}$, so H2 need not hold for this example. For the general case, H2 remains a standing assumption.
+
+$$
+I_{n+1} = \int_{I_n}^{+\infty} e^{-t} \, dt = e^{-I_n}
+$$
+
+Differentiating gives $F'(x) = -e^{-x}$. Although $|F'(x)| < 1$ holds throughout $x > 0$, this alone does not directly yield a uniform compression constant. To apply the Banach fixed-point theorem, one may take the forward-invariant closed interval
+
+$$
+X = [e^{-1}, 1].
+$$
+
+In that case,
+
+$$
+F(X) = [e^{-1}, e^{-e^{-1}}] \subseteq X,
+$$
+
+and
+
+$$
+\sup_{x\in X}|F'(x)| = e^{-e^{-1}} \approx 0.6922 < 1.
+$$
+
+Hence $F$ is a strict contraction on $X$. The fixed-point equation $I^* = e^{-I^*}$ rearranges to $I^* e^{I^*} = 1$, whose analytical solution is the Omega constant $\Omega = W(1) \approx 0.567143$ [4]. At the fixed point, $|F'(I^*)| = \Omega \approx 0.567 < 1$, so the iteration oscillates alternately near this fixed point and converges linearly.
+
+### 8.2 Example B: Critical Sublinear Convergence (the Original Prototype's Structure)
+
+Using the same integrand $f(t)=e^{-t}$, but with the integration interval changed to the finite interval $[0, I_n]$, the iteration formula is:
+
+$$
+I_{n+1} = \int_{0}^{I_n} e^{-t} \, dt = 1 - e^{-I_n}
+$$
+
+The fixed-point equation $I^* = 1 - e^{-I^*}$ has, on $\mathbb{R}$, the **unique solution $I^* = 0$**. This requires a zero-analysis argument rather than concavity alone: $g(x) = 1 - e^{-x} - x$ satisfies $g'(x) = e^{-x} - 1$, so $g$ is strictly decreasing on $x > 0$ and strictly increasing on $x < 0$, attaining its global maximum $g(0) = 0$ at $x = 0$, and hence $g(x) < 0$ everywhere else (see Appendix C.3 for the complete argument). Here $F'(0) = 1$, so the strict compression condition $|F'| < 1$ fails, and the Banach theorem does not apply directly.
+
+**Convergence behavior**: If $I_0 = 0$, then $I_1 = 0$ and the orbit is constantly $0$ (trivial convergence). For any $I_0 > 0$, we have $0 < I_{n+1} < I_n$, and $I_n \downarrow 0$. The rate of convergence is sublinear, $I_n \sim 2/n$. If $I_0 < 0$, then $I_{n+1} - I_n = 1 - e^{-I_n} - I_n < 0$ (since $g(x) = 1 - e^{-x} - x < 0$ for all $x < 0$), so the sequence is strictly decreasing. If it were bounded below, it would converge to some limit $L < 0$ satisfying $L = 1 - e^{-L}$, but no such solution exists. Hence $I_n \downarrow -\infty$ and the sequence diverges. The domain of convergence is thus $[0, +\infty)$.
+
+**Asymptotic proof**: By Taylor expansion, as $I_n \to 0$,
+
+$$
+I_{n+1} = 1 - e^{-I_n} = I_n - \frac{1}{2}I_n^2 + O(I_n^3).
+$$
+
+Hence
+
+$$
+\frac{1}{I_{n+1}} - \frac{1}{I_n} = \frac{I_n - I_{n+1}}{I_n I_{n+1}} = \frac{\frac{1}{2}I_n^2 + O(I_n^3)}{I_n\left(I_n - \frac{1}{2}I_n^2 + O(I_n^3)\right)} \longrightarrow \frac{1}{2}.
+$$
+
+By the Stolz–Cesàro theorem,
+
+$$
+\lim_{n\to\infty} \frac{1/I_n}{n} = \frac{1}{2},
+$$
+
+and hence
+
+$$
+\boxed{I_n \sim \frac{2}{n}}.
+$$
+
+This gives the rigorous sublinear asymptotic rate in the critical case; this result does not follow from the Banach contraction theorem.
+
+### 8.3 Comparative Significance
+
+Both examples use the same integrand $f(t)=e^{-t}$, but with entirely different integration-boundary geometries:
+
+- **Example A** (semi-infinite interval $[I_n, +\infty)$): yields a strict contraction, with the Banach theorem directly guaranteeing linear convergence
+- **Example B** (finite interval $[0, I_n]$): yields a critical map with $F'(0)=1$; convergence occurs, but at a sublinear rate
+
+This shows that the geometric structure of the integration boundary can significantly change the convergence properties of the induced dynamical system, and also demonstrates the unified descriptive capacity of this paper's framework for both "standard convergence" and "critical behavior."
+
+---
+
+## Appendix
+
+### A. Schematic of the Inventory Control Model
+
+Consider a dynamic inventory control scenario: let $I_n$ be the ending inventory in the $n$-th period, with the random demand variable $D$ following probability density $f(D)$. The upper and lower bounds of the replenishment policy are dynamically determined by the current inventory level, denoted $L(I_n)$ and $U(I_n)$. In this framework, the next-period inventory $I_{n+1}$ is jointly determined by the expected demand within the period and the specific replenishment execution rule. This paper focuses on the convergence theory of this iterative map; the concrete inventory-cost optimization and replenishment-quantity calculation depend on the chosen business model and are not developed here in explicit integral form.
+
+### B. Further Extension Directions
+
+**B.1 Random-perturbation extension**: $I_{n+1} = F(I_n) + \xi_{n+1}$, studying the stability of the system and the asymptotic distribution of the steady state under bounded noise.
+
+**B.2 Higher-dimensional vector extension**: With the iteration variable $I_n \in \mathbb{R}^d$, the convergence condition is replaced by a bound on the operator norm of the Jacobian $J_{F_n}(x)$: $\|J_{F_n}(x)\|_{\mathrm{op}} \le q < 1$; when $X$ is convex and $F$ is $C^1$ on $X$, integrating along the line segment connecting $x,y$ yields the mean-value inequality $\|F(x) - F(y)\| \le \sup_{z\in X}\|J_F(z)\|_{\mathrm{op}} \cdot \|x - y\|$. More generally, one may use a suitable path-connectedness condition together with an appropriate path-length bound in place of convexity; this paper adopts convexity as a standard sufficient condition.
+
+**Note**: The spectral radius $\rho(J) = \lim_{n\to\infty}\|J^n\|^{1/n}$ characterizes only the asymptotic behavior over long iterations, and cannot directly yield a Lipschitz constant; determining a higher-dimensional contraction requires the operator norm.
+
+**B.3 Connection to Volterra integrals**: Certain state-dependent integral maps bear a formal connection to Volterra-type integral equations, but the two are not equivalent; a continuous-time model additionally requires introducing a time variable, a kernel function, and the corresponding function space.
+
+**B.4 Analogy with autoregressive models [7]**: An AR($p$) model and the present structure can both be expressed as discrete state updates, but the linear-combination/random-perturbation mechanism of AR($p$) differs from the variable-limit-integral mechanism of the present structure; this is only a formal analogy.
+
+**B.5 Fractal iterated systems [9]**: Self-similar sequences of maps combined with IFS theory can be used to study fractal fixed points.
+
+**B.6 Generalization to operator equations**: Maps $F: \mathcal{H} \to \mathcal{H}$, for iterative solution of partial differential equations.
+
+**B.7 Design of teaching exercises**: Four categories of exercises can be designed—conceptual verification, numerical computation, theoretical proof, and engineering modeling.
+
+**B.8 Discrete-to-continuous degeneration bridge (ODE degeneration derivation)**: For a discrete iteration to degenerate to a continuous dynamical system, a first-order consistency condition must hold:
+
+$$
+F_{\Delta t}(I) = I + \Delta t \cdot G(I) + o(\Delta t) \quad (\Delta t \to 0)
+$$
+
+Here $F_{\Delta t}$ is the discrete evolution map, distinct from the integral operator $F$ of the main text. This condition is the first-order consistency requirement for a formal continuous-time limit leading to $\dot{I} = G(I)$. By itself, however, it does not guarantee convergence of the discrete trajectories to the corresponding continuous-time solution; stability and additional regularity assumptions are required.
+
+**B.9 Multiplicative and generalized cumulative extensions (core standing constraints)**
+
+In this section, $G(x)$ denotes a variable-limit integral map of the form $\displaystyle\int_{L(x)}^{U(x)} f(t)\,dt$, whose structure is identical to the autonomous map $F$ (or the non-autonomous maps $F_n$) in the main text; the separate notation $G$ is introduced here to distinguish the composite structure.
+
+**Standing constraints and scope of convergence**: All generalizations in this section are built on the forward-invariant closed set defined in Section 2.1.
+
+- **Global convergence**: There must exist a closed interval $X = [a,b]$ such that the map $F: X \to X$, and the integral is well-defined for all $x \in X$ under the integral convention adopted in this paper; if the undirected-integral semantics are used, one additionally requires $L(x) \le U(x)$.
+- **Local convergence**: If the above conditions hold only in some neighborhood $U \subset X$ of the fixed point $I^*$, only local convergence is guaranteed.
+
+In particular, for the multiplicative iteration $F(x) = x \cdot G(x)$, if $I^* = 0$ is a fixed point, checking validity only at that single point is insufficient. One must verify the boundedness of $F(x)$ in a neighborhood of $x = 0$: it is not enough to ensure $\lim_{x \to 0} x \cdot G(x) \in X$ (a necessary condition); one must also verify the range constraint over the whole neighborhood (a sufficient condition), to guard against domain escape or numerical oscillation caused by an unbounded $G(x)$.
+
+This structure by default adopts the additive cumulative form $I_{n+1} = G(I_n)$. Below we give the multiplicative and affine generalizations.
+
+#### B.9.1 Multiplicative special case
+
+Define $F(x) = x \cdot G(x)$, with iteration $I_{n+1} = F(I_n)$.
+
+**Compression condition**: $|F'(x)| = |G(x) + xG'(x)| \le q < 1$.
+
+**Fixed-point analysis**: The equation $I^* = I^* \cdot G(I^*)$ has solutions $I^* = 0$ or $G(I^*) = 1$.
+
+For the case $I^* = 0$, in addition to checking $L(0) < U(0)$, one must verify neighborhood invariance according to the standing constraint above. Note that $\lim_{x \to 0} xG(x) \in X$ is only a heuristic necessary-condition check and cannot substitute for verification of the domain and self-mapping property. For example, $G(x) = 1/\sqrt{x}$ is defined only for $x > 0$, so $x = 0$ cannot be treated as a valid input to $G$ without an explicit extension. If, on $x > 0$, we consider $F(x) = xG(x) = \sqrt{x}$, then at $x = 0.04$, $F(x) = 0.2$; if $X = [0, 0.1]$, then $F(X) \not\subseteq X$. This example shows that one must first specify the domain of the map before verifying forward invariance; if one wishes to include $0$ in the state space, $F$ must be explicitly extended continuously as $F(0) = 0$, in which case the object under study is this extended $F$, not the original value of $xG(x)$ at $x = 0$. After such an extension, the Lipschitz/compression constant and the invariance of the range on the closed set including $0$ must be re-verified for the extended map; the properties on the original open set must not be automatically inherited by the extended map.
+
+**Stability**: When $F$ is differentiable at $I^*$, the magnitude $|F'(I^*)|$ determines local attraction or repulsion in the standard one-dimensional setting: $|F'(I^*)| < 1$ indicates local attraction, while $|F'(I^*)| > 1$ indicates local repulsion; the critical case $|F'(I^*)| = 1$ requires separate analysis (see Section 2.3).
+
+**Example**: $G(x) = e^{-x}$, with iteration $I_{n+1} = I_n e^{-I_n}$, corresponding to $F(x) = x e^{-x}$, with derivative $F'(x) = (1-x)e^{-x}$. At $x = 0$, $|F'(0)| = 1$, so strict compression fails (a critical case). The equation $G(I^*) = 1$ has only the solution $I^* = 0$, so there is no nonzero fixed point. In fact, for $I_0 > 0$ the sequence decreases monotonically to $0$, with convergence rate $O(1/n)$ (obtained from the difference asymptotics $I_{n+1}^{-1} - I_n^{-1} \to 1$), a sublinear critical convergence whose rate cannot be guaranteed by the Banach theorem. This example shows that a multiplicative structure cannot simply reuse the compression condition of the additive case; the composite map $F$ must be verified separately.
+
+**Numerical note**: Error propagation for a multiplicative iteration has a multiplicative-amplification character, and its total error bound may take a different form from the additive iteration's $\delta/(1-q)$, requiring separate derivation depending on the properties of $G(x)$; nonetheless, the error-control ideas of Section 5 still apply.
+
+#### B.9.2 Affine structure
+
+Define $F(x) = \alpha x + \beta G(x)$, with iteration $I_{n+1} = F(I_n)$.
+
+**Compression condition**: $|F'(x)| = |\alpha + \beta G'(x)| \le q < 1$.
+
+**Note**: $\alpha + \beta = 1$ is a common steady-state constraint in engineering, not a necessary condition for convergence.
+
+**Example**: Take $\alpha = 0.6$, $\beta = 0.4$, $G(x) = \int_0^x e^{-t} \, dt$. For $x > 0$, $F'(x) = 0.6 + 0.4e^{-x} < 1$; at $x = 0$, $F'(0) = 1$, a critical case requiring separate verification of neighborhood invariance (e.g., by directly computing $F(x) - x = 0.6x + 0.4(1-e^{-x}) - x = 0.4(1-e^{-x}-x)$; by Appendix C.3, $g(x) = 1-e^{-x}-x < 0$ for $x > 0$, so $F(x) < x$ in a right-neighborhood of the fixed point, and the iteration decreases monotonically). The fixed-point equation $0.6I^* + 0.4(1 - e^{-I^*}) = I^*$ is equivalent to $I^* = 1 - e^{-I^*}$, so the unique fixed point on $\mathbb{R}$ is still $I^* = 0$; no separate numerical solution is required here.
+
+**Numerical note**: For multiplicative iterations, using the relative-residual criterion (see Section 5.1) is recommended.
+
+#### B.9.3 General operation convergence principle
+
+For the iteration $I_{n+1} = I_n \oplus G(I_n)$, define $F(x) = x \oplus G(x)$; the core convergence requirement is $\sup |F'(x)| < 1$.
+
+**Note**: Non-smooth operations such as $\max/\min$ are outside this differential framework.
+
+**Non-autonomous extension**: If the coefficients or kernel function vary with time (e.g., $G_n(x)$), convergence should be assessed according to the non-autonomous criteria of Section 4.3.
+
+**Higher-dimensional extension**: In the vector case, $|F'(x)|$ must be replaced by the Jacobian operator norm $\|J_F(x)\|_{\mathrm{op}}$; see the Appendix.
+
+**Differentiation paradigm**: For a specific operation $\oplus$, the derivative of the composite map $F(x) = x \oplus G(x)$ must be computed concretely according to the Leibniz rule together with the differentiation rule for the corresponding binary operation.
+
+### C. Common Computational and Conceptual Pitfalls (Practice-Oriented)
+
+C.1 **Confusing the direction of integration with model semantics**: $L(x) > U(x)$ is not a mathematical error under the directed-integral convention—it merely reverses the sign of the integral—but in applications where "lower/upper bound" carries a semantic meaning (e.g., inventory, feasible region), it may lose its modeling meaning. Prevention: first decide explicitly whether the directed-integral or the undirected interval-constraint convention is being used, then verify $L(x) \le U(x)$ accordingly.
+
+C.2 **Reversed layer-index error**: In Section 1.2, a larger nesting subscript $k$ corresponds to a deeper inner layer, which is the opposite direction of the recursive subscript $I_0 \to I_1 \to \cdots$; this is easily confused when porting to code. Prevention: strictly follow the indexing convention of Section 1.2 of this document.
+
+C.3 **Numerical pitfall in the example**: The unique real fixed point of $F(x) = 1 - e^{-x}$ (with $L = 0, U = x$) is $I^* = 0$; readers should be careful not to mistakenly apply the numerical value of the Omega constant to this example. Verification: $g(x) = 1 - e^{-x} - x$ satisfies $g(0) = 0$ and $g'(x) = e^{-x} - 1$, so $g(x)$ is strictly decreasing on $x > 0$; combined with $1 - e^{-x} - x < 0$ for $x < 0$, the unique real root is $0$. Moreover $F'(0) = 1$, a critical case. Prevention: substitute the specific $F$ and resolve the fixed-point equation $I^* = F(I^*)$; do not reuse the numerical value from a different example.
+
+C.4 **Confusing "infinite nesting" with a "general infinite multiple integral"**: The infinite nested limit defined in this paper is the limit of the truncation-value sequence $I^{(N)}$, whose convergence is guaranteed by the compression-type sufficient conditions of Section 4.1. General infinite series, infinite-layer iterations, or other infinite multiple-integral problems each require their own appropriate convergence conditions and cannot be inferred automatically from the theorem of this paper. Prevention: within the framework of Section 1.3, first clarify the truncation sequence and its convergence conditions before use.
+
+C.5 **Misapplication of dimension**: Directly applying the one-dimensional compression condition $|F'(x)| \le q$ to a multi-dimensional vector field, omitting the Jacobian operator-norm condition. Prevention: for the higher-dimensional case, see Appendix B.2.
+
+C.6 **Wrong choice of numerical stopping criterion**: When $|I_n|$ is close to $0$, the relative residual $\frac{|I_{n+1} - I_n|}{|I_n|}$ becomes distorted. Prevention: choose the absolute, relative, or fixed-point residual according to the scenario described in Section 5.1.
+
+---
+
+## Open Problems and Future Extensions
+
+The following directions are left for future research:
+
+1. Regularity theory for the non-continuous case of state-dependent integrands.
+2. Necessary and sufficient conditions for the correspondence between non-autonomous infinite nested truncation and the recursive sequence.
+3. Explicit numerical validation of the application scenarios.
+4. Higher-dimensional and complex-analytic extensions.
+5. Non-contractive (critical) convergence criteria.
+6. A complete characterization of necessary and sufficient conditions for convergence of the iterative sequence (in response to the remark following Definition 1.3, where only a sufficient condition is currently given).
+
+---
+
+## References
+
+[1] Banach, S. (1922). Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales. *Fund. Math.*, 3, 133–181. https://doi.org/10.4064/fm-3-1-133-181
+
+[2] Ostrowski, A. M. (1973). *Solution of Equations in Euclidean and Banach Spaces* (3rd ed.). New York: Academic Press.
+
+[3] Kantorovich, L. V., & Akilov, G. P. (1982). *Functional Analysis* (2nd ed.). Oxford: Pergamon Press.
+
+[4] Corless, R. M., Gonnet, G. H., Hare, D. E. G., Jeffrey, D. J., & Knuth, D. E. (1996). On the Lambert W function. *Adv. Comput. Math.*, 5(1), 329–359. https://doi.org/10.1007/BF02124750
+
+[5] Hutchinson, J. E. (1981). Fractals and self-similarity. *Indiana Univ. Math. J.*, 30(5), 713–747. https://doi.org/10.1512/iumj.1981.30.30055
+
+[6] Berinde, V. (2007). *Iterative Approximation of Fixed Points* (2nd ed.). Lecture Notes in Mathematics, Vol. 1912. Berlin: Springer. https://doi.org/10.1007/978-3-540-72234-2
+
+[7] Elaydi, S. (2005). *An Introduction to Difference Equations* (3rd ed.). New York: Springer. https://doi.org/10.1007/0-387-27602-5
+
+[8] Burton, T. A. (2005). *Volterra Integral and Differential Equations* (2nd ed.). Amsterdam: Elsevier.
+
+[9] Barnsley, M. F. (1988). *Fractals Everywhere*. Boston: Academic Press.
