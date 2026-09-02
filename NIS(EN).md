@@ -1,12 +1,14 @@
-# Nested Integral Structure
+# Nested Integral Structure: Convergence Theory of Dynamic-Boundary Integral Iterations
 
 **Abstract**: This paper establishes a dynamical-system framework based on the iteration of variable-limit integrals (Nested Integral Structure, NIS). The core rule is that the upper and lower limits of the outer integral are dynamically determined by the numerical result of the preceding inner integral, and the computation proceeds strictly layer by layer from the inside out. The original form is a finite-depth multiple nested integral, which is extended in two directions—"recursive convergence" and "cumulative summation"—and described under a unified state-update formulation, where static series appear as a degenerate case. Using the contraction mapping principle and perturbation summability conditions, this paper provides sufficient conditions for the convergence of iterative sequences, establishes the existence and uniqueness theorem of fixed points, and analyzes the asymptotic behavior in both standard contraction and critical cases. This framework can be used to model dynamic evolution processes in which the preceding output determines the boundaries of subsequent operations. It aims to systematically describe variable-limit integral iterations within existing theoretical frameworks, rather than establishing new contraction mapping theories.
 
 **Keywords**: nested integral structure; contraction mapping; perturbation summability; fixed point; convergence; variable-limit integral iteration
 
-**Declaration**: The mathematical framework and core conclusions of this paper were proposed and completed by the author. AI tools assisted with language polishing, typesetting, and cross-checking of mathematical formula typesetting; all key mathematical propositions were independently verified by the author.
+**Use of Artificial Intelligence**: AI tools assisted with language polishing, typesetting, and cross-checking of mathematical formula typesetting. The author is responsible for the final manuscript and independently verified all key mathematical propositions.
 
-**Conflict of Interest Statement**: The author declares that there is no conflict of interest regarding the publication of this paper.
+**Data Availability Statement**: No external datasets were generated or analyzed in this theoretical work. All mathematical definitions, derivations, proofs, and numerical examples are contained within this manuscript.
+
+**Conflicts of Interest**: The author declares no conflicts of interest.
 
 ---
 
