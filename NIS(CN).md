@@ -1,5 +1,4 @@
-[NIS(CN).md](https://github.com/user-attachments/files/31693973/NIS.CN.md)
-# 嵌套积分结构完整描述
+# 嵌套积分结构：动态边界积分迭代的收敛理论
 
 **摘要**：本文建立一类以变限积分迭代为基本运算的动态系统模型（Nested Integral Structure, NIS）。核心规则为：外层积分的上下限由前一轮积分的数值结果动态决定，运算严格由内向外逐层推进。原始形态为有限层数的多重嵌套积分，向"递推收敛"与"累加求和"两个方向拓展，并在统一的状态更新形式下进行描述，静态级数可作为其退化情形。本文运用压缩映射原理与摄动可和性条件，给出迭代序列收敛的充分条件，建立不动点的存在唯一性定理，并分析标准压缩与临界情形的渐近行为。该框架可用于建模前序输出决定后续运算边界的动态演化过程。本文不主张建立新的压缩映射理论或替代已有非自治动力系统理论。
 
@@ -7,9 +6,11 @@
 
 **Abstract**: This paper introduces a dynamical-system framework based on the iteration of variable-limit integrals. The defining mechanism is that the integration bounds at one layer are determined by the numerical output of the preceding inner layer, enforcing an inside-out computational structure. Starting from finite-depth nested integrals, the framework is developed along two analytical directions: recursive iteration and cumulative summation. These components are then organized into a unified state-update formulation for dynamical processes in which preceding states determine the operational boundaries of subsequent integral transformations. Sufficient conditions for convergence, fixed-point existence and uniqueness, and asymptotic behavior are established using contraction mapping and perturbation summability conditions.
 
-**声明**：本文的数学框架与核心结论由作者提出并完成；语言润色、排版整理及多轮交叉审校借助了 AI 工具。所有关键数学命题均经过多轮交叉审查与作者复核。
+**人工智能使用说明**：AI 工具参与了语言润色、排版整理及数学公式格式的交叉核对。作者对最终稿件负责，并独立复核了所有关键数学命题。
 
-**利益冲突声明**：作者声明，就本文的发表不存在利益冲突。
+**数据可用性声明**：本文为纯理论研究，未生成或分析外部数据集。本文所涉及的全部数学定义、推导、证明及数值算例均包含在稿件中。
+
+**利益冲突声明**：作者声明不存在利益冲突。
 
 ---
 
